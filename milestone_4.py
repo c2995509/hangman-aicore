@@ -16,7 +16,7 @@ class Hangman:
         return word
 
     list_of_guesses=[]
-   
+   #Check if input is validh
     def ask_for_input(self):
         #word_selected=word_selected()
         while True:   
@@ -25,19 +25,26 @@ class Hangman:
             if len(guess) == 1 and guess.isalpha() == True:
                 print('Valid input')
                 break
-            elif guess in enumerate (self.list_of_guesses):
-                print("you've already tried that letter!")
             else:
                 print('Invalid letter. Please, enter a single alphabetical character.')
                 pass
         self.list_of_guesses.append(guess)
         return guess
-    #ask_for_input()
-
+    #check for duplicates
+    def check_duplicates(self):
+        guess = self.ask_for_input()
+        for idx,letter in enumerate(self.list_of_guesses):
+            if letter == guess:
+                print('You have already used this letter! Try again.')
+                pass
+            else:
+                break
+        return guess  
+    #Check if guess is in the selected word
     def check_guess(self):
                 #word_selected=word_selected()
         while True:
-            guess = self.ask_for_input()
+            guess = self.check_duplicates()
             if guess in self.word:
                 print('Good guess!',guess, 'is in the word')
                 for idx,letter in enumerate(self.word_list):
@@ -49,10 +56,9 @@ class Hangman:
                 print('Sorry,',guess,' is not in the word. Try again.')
                 self.num_lives -= 1
                 print('You have ', self.num_lives , ' lives left')
-                self.list_of_guesses.append=guess
+                self.list_of_guesses.append(guess)
                 pass
-        
-    #check_guess(self)
+
 
 my_word_list=('apple', 'orange', 'kiwi', 'plum', 'peach','pineapple','banana')           
 game = Hangman(my_word_list)   
