@@ -1,106 +1,89 @@
+import random
+'''
+This is a game called Hangman
+-----------------------------
+A player has 5 lives to guess all the letters in a word
+The computer randomly selects a word and displays it with underscores for each letter that hasn't been guessed yet.
+the player is asked to input a single letter. The game will reject anything other inputs
+The game will then check if the letter is in the word, if not the player loses a life, if correct the letter is shown 
+The process is repeated until either the player loses all their lives or has guessed the word
+
+'''
+
 class Hangman:
     def __init__(self,word_list,num_lives=5):
         self.word_list = word_list
-        self.word = self.word_select()
+        self.word = random.choice(word_list)
         self.list_of_guesses = []
         self.word_guessed =['_']*len(self.word)
         self.num_letters =len(set(self.word))
         self.num_lives = num_lives
-        self.choose = ''
-        self.play_cont = ''
         
-    def play_hangman(self):
-        choose=input('Would you like to play Hangman? y or n').lower()
-        if choose == 'y':
-            print("Let's play Hangman")
-            game.check_guess()
-        elif choose == 'n':
-            print('Please come again')
-        else:
-            print('Invalid input! Please enter y or n')
-            
-    def play_game(self):
-        while True:
-            if self.num_lives == 0 and self.num_letters >= 0:
-                print("You've lost,better luck next time!")
-                break
-            elif self.num_lives >= 0 and self.num_letters >= 0:
-                game.play_continue()
-            elif self.num_lives >= 0 and self.num_letters == 0:
-                print('Congratulations. You won the game!')
-                break
 
-    def play_continue(self):
-        play_cont = input('Would you like to continue? y or n').lower()
-        if play_cont == 'y':
-            game.check_guess()
-        elif play_cont == 'n':
-            print('Please come again')
-        else:
-            print('Invalid input! Please enter y or n')
-            pass
-
-    def word_select(self):
-        import random
-    # A list of words
-    def word_select(self):
-        import random
-        word = random.choice(self.word_list)
-        return word
-
-    list_of_guesses=[]
-   #Check if input is validh
+ 
+   #Check if input is valid
     def ask_for_input(self):
-        #word_selected=word_selected()
-        while True:   
+       #word_selected=word_selected()
+        while True:
+            
             guess = input("please enter a letter?").lower()
-            #force the input character letter to be in lower case i.e. A to a
-            #guess=guess.lower() 
-            #if statement to check input is a single character and is a letter using isaplha inbuilt function
-            #If input function is a letter and a single charater then proceed
+                    
+           #Cchecks that a player inputs only a single letter
             if len(guess) == 1 and guess.isalpha() == True:
                 print('Valid input')
-                break
+                #Check if a player has already entered a letter previously
+                if guess in self.list_of_guesses:
+                    print('You have already entered that letter! Try again.')
+                else:
+                    break
             else:
                 print('Invalid letter. Please, enter a single alphabetical character.')
                 pass
-        #Update the list of letters entered
+        ##Updates the list of letters entered    
         self.list_of_guesses.append(guess)
-        return guess
-    #check for duplicates
-    def check_duplicates(self):
-        game.play_game()
-        guess = self.ask_for_input()
-        for idx,letter in enumerate(self.list_of_guesses):
-            if letter == guess:
-                print('You have already used this letter! Try again.')
-                pass
-            else:
-                break
-        return guess  
-    #Check if guess is in the selected word
-    def check_guess(self):
-                #word_selected=word_selected()
-        while True:
-            guess = self.check_duplicates()
-            if guess in self.word:
-                print('Good guess!',guess, 'is in the word')
-                for idx,letter in enumerate(self.word_list):
-                    if letter==guess:
-                        self.word_guessed[idx]=guess
-                    else:
-                        pass
-            else:
-                print('Sorry,',guess,' is not in the word. Try again.')
-                self.num_lives -= 1
-                print('You have ', self.num_lives , ' lives left')
-                self.list_of_guesses.append(guess)
-                pass
+        self.check_guess(guess)
+        
+
+    
+    def check_guess(self,guess):
+        #Check if guess is in the selected word                
+        if guess in self.word:
+            print('Good guess!',guess, 'is in the word')
+            #player has entered a letter in the word and replaces '_' with guessed letter(s)
+            for idx,letter in enumerate(self.word_list):
+                if letter==guess:
+                    self.word_guessed[idx]=guess
+                    
+            #Reduces the number of unqiue letters player still needed to guess
+            self.num_letters -= 1       
+        else:
+            #player has entered a letter not in the word list and loses a life
+            print('Sorry,',guess,' is not in the word. Try again.')
+            self.num_lives -= 1
+            print('You have ', self.num_lives , ' lives left')
+
+       
 
 
-my_word_list=('apple', 'orange', 'kiwi', 'plum', 'peach','pineapple','banana')           
-game = Hangman(my_word_list)   
 
-#game.ask_for_input()
 
-game.play_hangman()
+def play_game(word_list):
+    num_lives=5
+    #create an instance of the class and assigning to the varaiable called game links this method to the class
+    game=Hangman(word_list,num_lives)
+  
+    while True:
+        #checks the status of the games by looking into the class
+        #Game status no lives, and not all letters guessed then plaer lost
+        if game.num_lives == 0 and game.num_letters > 0:
+            print("You've lost better luck next time!")
+            break
+        #Game status has lives but not guessed all the letters, player to guess another letter
+        elif game.num_lives > 0 and game.num_letters > 0 :
+            game.ask_for_input()
+        ##Game Status, player has guessed all letters of the word and won    
+        elif game.num_lives > 0 and game.num_letters == 0:
+            print('Congratulations.You won the game!')
+            break
+
+play_game(['apple', 'orange', 'kiwi', 'plum', 'peach','pineapple','banana'])
