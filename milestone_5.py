@@ -1,5 +1,5 @@
 class Hangman:
-    def __init__(self,choose,word_list,num_lives=5):
+    def __init__(self,word_list,num_lives=5):
         self.word_list = word_list
         self.word = self.word_select()
         self.list_of_guesses = []
@@ -69,6 +69,7 @@ class Hangman:
         return guess
     #check for duplicates
     def check_duplicates(self):
+        game.play_game()
         guess = self.ask_for_input()
         for idx,letter in enumerate(self.list_of_guesses):
             if letter == guess:
